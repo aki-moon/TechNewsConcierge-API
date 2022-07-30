@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.6.10'
 	id 'io.spring.dependency-management' version '1.0.12.RELEASE'
 	id 'java'
+	id "org.flywaydb.flyway" version "8.2.0"
 }
 
 group = 'aki.moon'
@@ -13,6 +14,8 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.flywaydb:flyway-core'
+	runtimeOnly 'mysql:mysql-connector-java'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -20,4 +23,10 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+flyway {
+	url = "jdbc:mysql://127.0.0.1:3306/main"
+	user = "root"
+	password = "password"
 }
