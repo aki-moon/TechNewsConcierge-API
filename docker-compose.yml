@@ -1,0 +1,11 @@
+# yaml定義のバージョンを指定
+version: "3"
+services:
+  mysql:
+    image: arm64v8/mysql:8.0-oracle
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
