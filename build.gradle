@@ -3,6 +3,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.12.RELEASE'
 	id 'java'
 	id "org.flywaydb.flyway" version "8.2.0"
+	id 'nu.studer.jooq' version '7.1.1'
 }
 
 group = 'aki.moon'
@@ -19,6 +20,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	jooqGenerator 'mysql:mysql-connector-java'
+	jooqGenerator("jakarta.xml.bind:jakarta.xml.bind-api:4.0.0")
 }
 
 tasks.named('test') {
@@ -29,4 +32,33 @@ flyway {
 	url = "jdbc:mysql://127.0.0.1:3306/main"
 	user = "root"
 	password = "password"
+}
+
+jooq {
+	configurations {
+		main {
+			generationTool {
+				logging = org.jooq.meta.jaxb.Logging.WARN
+				jdbc {
+					driver = 'com.mysql.cj.jdbc.Driver'
+					url = "jdbc:mysql://127.0.0.1:3306/main"
+					user = 'root'
+					password = 'password'
+				}
+				generator {
+					name = 'org.jooq.codegen.DefaultGenerator'
+					database {
+						name = 'org.jooq.meta.mysql.MySQLDatabase'
+						inputSchema = 'main'
+						includes = '.*'
+						excludes = ''
+					}
+					target {
+						packageName = 'aki.moon.technewsconcierge'
+					}
+					strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+				}
+			}
+		}
+	}
 }
